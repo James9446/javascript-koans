@@ -12,7 +12,7 @@ describe("About Applying What We Have Learnt", function() {
        { name: "Taste Of Athens", ingredients: ["spinach", "kalamata olives", "sesame seeds"], containsNuts: true }
     ];
   });
-
+// product - array of [objs] > (each item) obj - name: string, ingredients: array of [strings], containsNutS: boolean
   /*********************************************************************************/
 
   it("given I'm allergic to nuts and hate mushrooms, it should find a pizza I can eat (imperative)", function () {
@@ -29,16 +29,22 @@ describe("About Applying What We Have Learnt", function() {
             if (!hasMushrooms) productsICanEat.push(products[i]);
         }
     }
-
-    expect(productsICanEat.length).toBe(FILL_ME_IN);
+    console.log(productsICanEat)
+    expect(productsICanEat.length).toBe(1);
   });
 
   it("given I'm allergic to nuts and hate mushrooms, it should find a pizza I can eat (functional)", function () {
       var productsICanEat = [];
+      var isNotMushrooms = function(i) {return i !== 'mushrooms'}
 
       /* solve using filter() & all() / any() */
+      productsICanEat = products.filter(function(i) {
+        if (_(i.ingredients).all(isNotMushrooms) && !i.containsNuts) {
+          return i;
+        }
+      })
 
-      expect(productsICanEat.length).toBe(FILL_ME_IN);
+      expect(productsICanEat.length).toBe(1);
   });
 
   /*********************************************************************************/
@@ -52,13 +58,19 @@ describe("About Applying What We Have Learnt", function() {
       }
     }
     
-    expect(sum).toBe(FILL_ME_IN);
+    expect(sum).toBe(233168);
   });
 
   it("should add all the natural numbers below 1000 that are multiples of 3 or 5 (functional)", function () {
-    var sum = FILL_ME_IN;    /* try chaining range() and reduce() */
-
-    expect(233168).toBe(FILL_ME_IN);
+    var sum = _.range(1000).reduce(function(acc, current) {
+      if (current % 3 === 0 || current % 5 === 0) {
+        return acc + current;
+      } else{
+        return acc;
+      }
+    });
+        /* try chaining range() and reduce() */
+    expect(233168).toBe(sum);
   });
 
   /*********************************************************************************/
@@ -71,15 +83,26 @@ describe("About Applying What We Have Learnt", function() {
         }
     }
 
-    expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
 
   it("should count the ingredient occurrence (functional)", function () {
     var ingredientCount = { "{ingredient name}": 0 };
 
     /* chain() together map(), flatten() and reduce() */
+    _(products).chain().map(function(i) { 
+      return i.ingredients;
+    }).flatten().reduce(function (acc, cur) {
+      if (!ingredientCount.hasOwnProperty(cur)) {
+          ingredientCount[cur] = 1;
+      } else {
+        ingredientCount[cur]++;
+      }
+      return cur;    
+    }, 0);
 
-    expect(ingredientCount['mushrooms']).toBe(FILL_ME_IN);
+    console.log(ingredientCount)
+    expect(ingredientCount['mushrooms']).toBe(2);
   });
 
   /*********************************************************************************/
